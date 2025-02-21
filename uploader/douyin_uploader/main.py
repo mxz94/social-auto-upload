@@ -5,7 +5,7 @@ from playwright.async_api import Playwright, async_playwright, Page
 import os
 import asyncio
 
-from conf import LOCAL_CHROME_PATH
+from conf import LOCAL_CHROME_PATH, HEADLESS
 from utils.base_social_media import set_init_script
 from utils.log import douyin_logger
 
@@ -48,7 +48,7 @@ async def douyin_setup(account_file, handle=False):
 async def douyin_cookie_gen(account_file):
     async with async_playwright() as playwright:
         options = {
-            'headless': False
+            'headless': HEADLESS
         }
         # Make sure to run headed.
         browser = await playwright.chromium.launch(**options)
@@ -97,9 +97,9 @@ class DouYinVideo(object):
     async def upload(self, playwright: Playwright) -> None:
         # 使用 Chromium 浏览器启动一个浏览器实例
         if self.local_executable_path:
-            browser = await playwright.chromium.launch(headless=False, executable_path=self.local_executable_path)
+            browser = await playwright.chromium.launch(headless=HEADLESS, executable_path=self.local_executable_path)
         else:
-            browser = await playwright.chromium.launch(headless=False)
+            browser = await playwright.chromium.launch(headless=HEADLESS)
         # 创建一个浏览器上下文，使用指定的 cookie 文件
         context = await browser.new_context(storage_state=f"{self.account_file}")
         context = await set_init_script(context)

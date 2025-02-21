@@ -12,7 +12,10 @@ DING = DingtalkChatbot(webhook, secret)
 def dinglog(msg):
     DING.send_text(msg)
 
+#  windows
+# HEADLESS = False
 
-
+#  linux
+HEADLESS = True
 
 IMG_PATH = "./media/imgs"

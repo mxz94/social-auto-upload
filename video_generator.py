@@ -11,6 +11,8 @@ import aiohttp
 from urllib.parse import urlparse
 from pathlib import Path
 
+from conf import HEADLESS
+
 # 常量定义
 STORAGE_STATE_PATH = "./cookies/auth.json"
 VIDEO_DIR = "./media/videos"
@@ -154,7 +156,7 @@ class JiMengClient:
 
             # 启动浏览器
             self.browser = await self.playwright.chromium.launch(
-                headless=False,
+                headless=HEADLESS,
                 args=browser_args,
                 channel='chrome'  # 使用已安装的Chrome
             )
