@@ -156,7 +156,10 @@ class DouYinVideo(object):
             await page.type(css_selector, "#" + tag)
             await page.press(css_selector, "Space")
         douyin_logger.info(f'总共添加{len(self.tags)}个话题')
-
+        await asyncio.sleep(2)
+        await page.get_by_text("添加声明").click()
+        await page.locator("label").filter(has_text="内容由AI生成").click()
+        await page.get_by_role("button", name="确定").click()
         while True:
             # 判断重新上传按钮是否存在，如果不存在，代表视频正在上传，则等待
             try:
