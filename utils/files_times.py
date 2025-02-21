@@ -3,6 +3,8 @@ from datetime import timedelta
 from datetime import datetime
 from pathlib import Path
 
+import requests
+
 from conf import BASE_DIR
 
 
@@ -37,6 +39,13 @@ def get_title_and_hashtags(filename):
 
     return title, hashtags
 
+
+def download_image_file(url, file_name):
+    r = requests.get(url)
+    with open(file_name, 'wb') as f:
+        f.write(r.content)
+        print(" # 写入DONE")
+    return
 
 def generate_schedule_time_next_day(total_videos, videos_per_day, daily_times=None, timestamps=False, start_days=0):
     """

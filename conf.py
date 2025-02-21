@@ -19,3 +19,5 @@ def dinglog(msg):
 HEADLESS = True
 
 IMG_PATH = "./media/imgs"
+VIDEO_PATH = "./media/videos"
+MUSIC_PATH = "./media/musics"

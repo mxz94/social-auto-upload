@@ -5,6 +5,8 @@ import shutil
 import os
 import logging
 
+from dingshi_run import upload_video
+
 app = FastAPI(
     title="我的 FastAPI 应用",
     description="这是一个示例 FastAPI 应用",
@@ -49,7 +51,7 @@ def kuoaddmusic(input_video):
     os.remove(reversed_video)
     os.remove(output_video)
 @app.post(path= "/upload/", summary="douyin上传视频api")
-async def upload_video(
+async def upload_video22(
         video: UploadFile = File(...),
         title: str = Form(...),
         desc: str = Form(...),
@@ -98,3 +100,9 @@ async def upload_video(
         "command_output": stdout.decode(),
         "error_msg": error_msg
     }
+
+@app.post(path= "/random_upload_video/", summary="douyin随机上传视频api")
+async def random_upload_video(
+        account: str = Form(...)
+):
+    upload_video(account)

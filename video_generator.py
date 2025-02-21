@@ -355,6 +355,8 @@ class JiMengClient:
             await self.page.locator("div").filter(has_text=re.compile(r"^视频 P2\.0 Pro精准响应提示词, 支持生成多镜头$")).first.click()
             if fen > 40:
                 await self.page.get_by_text("10s").click()
+            else:
+                await self.page.get_by_text("5s").click()
 
             # 等待生成接口响应
             self.logger.info("准备生成视频...")

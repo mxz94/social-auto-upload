@@ -1,8 +1,10 @@
 import os
+import time
 
 import requests
-os.environ["http_proxy"] = "http://127.0.0.1:7890"
-os.environ["https_proxy"] = "http://127.0.0.1:7890"
+
+from conf import IMG_PATH
+from utils.files_times import download_image_file
 
 cookies = {
     'webid': '1739944690701vpwqtser',
@@ -10,8 +12,8 @@ cookies = {
     'AGL_USER_ID': 'c7290528-a090-46a4-b541-d8e7d5051077',
     '_bl_uid': 'n4mn27wIbgaiah53ya9Id0mfwtde',
     'usertoken': 'd667c940a84348cfb3f67ea6a1b0fe54',
-    'acw_tc': '5772103b-a8e7-47ea-b91d-3c45aa26d83f97ce3a892b6c4cf46b167ade354b2928',
     'pic_newly_favorited_model': 'fc087a41946246c6a1803fcd822a5788',
+    'acw_tc': '151472ee-4d6f-4c2a-8335-27661f83e18141ba29aea6989d1edaea7d5741bd1016',
 }
 
 headers = {
@@ -29,176 +31,150 @@ headers = {
     'sec-fetch-site': 'same-origin',
     'token': 'd667c940a84348cfb3f67ea6a1b0fe54',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0',
-    # 'cookie': 'webid=1739944690701vpwqtser; webidExt=1739944690701vpwqtser; AGL_USER_ID=c7290528-a090-46a4-b541-d8e7d5051077; _bl_uid=n4mn27wIbgaiah53ya9Id0mfwtde; usertoken=d667c940a84348cfb3f67ea6a1b0fe54; acw_tc=5772103b-a8e7-47ea-b91d-3c45aa26d83f97ce3a892b6c4cf46b167ade354b2928; pic_newly_favorited_model=fc087a41946246c6a1803fcd822a5788',
+    # 'cookie': 'webid=1739944690701vpwqtser; webidExt=1739944690701vpwqtser; AGL_USER_ID=c7290528-a090-46a4-b541-d8e7d5051077; _bl_uid=n4mn27wIbgaiah53ya9Id0mfwtde; usertoken=d667c940a84348cfb3f67ea6a1b0fe54; pic_newly_favorited_model=fc087a41946246c6a1803fcd822a5788; acw_tc=151472ee-4d6f-4c2a-8335-27661f83e18141ba29aea6989d1edaea7d5741bd1016',
 }
 
-json_data = {
-    'checkpointId': 2669985,
-    'vae': '',
-    'promptMagic': 0,
-    'generateType': 22,
-    'frontCustomerReq': {
-        'frontId': '0f6c4fd7-e12a-4c55-9203-894722615f08',
-        'windowId': '',
-        'tabType': 'img2img',
-        'conAndSegAndGen': 'gen',
-    },
-    'useLcm': False,
-    'img2img': {
-        'prompt': 'fengyao, 1girl, in a classroom setting standing in front of a lectern or desk, wearing a fitted outfit that highlights her large breasts, solo, with long flowing black hair cascading over her shoulders. She is adorned with elegant jewelry, including a noticeable necklace that adds to her sophisticated appearance. The girl is looking directly at the viewer with a warm smile on her face, emphasizing her upper body and delicate collarbone. Her expression conveys confidence and friendliness as she stands in the well-lit classroom environment.',
-        'negativePrompt': 'ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),',
-        'imageMode': 0,
-        'sourceImageId': 'img/721931e9fc6d4ec9aa0206f3c02ed640/75892905-70ab-4696-a784-e4773253272c.png',
-        'maskImageId': '',
-        'resizeMode': 0,
-        'samplingMethod': 1,
-        'samplingStep': 30,
-        'resizeWidth': 1024,
-        'resizeHeight': 1024,
-        'resizeScale': 1,
-        'imgCount': 1,
-        'cfgScale': 3.5,
-        'seed': -1,
-        'denoisingStrength': 0.75,
-        'seedExtra': 0,
-        'restoreFaces': 0,
-        'tiling': 0,
-        'clipSkip': 2,
-        'randnSource': 0,
-        'sourceWidth': 1024,
-        'sourceHeight': 1024,
-    },
-    'additionalNetwork': [
-        {
-            'modelId': 18784900,
-            'modelVersionId': 18784900,
-            'modelUuid': '4167831416f24c599432171ef014d301',
-            'modelVersionUuid': 'f348dba54cab4c1c817496623d6b6e03',
-            'modelTypeId': 5,
-            'modelName': 'F.1真实素颜自拍照—小红书抖音涨粉Lora',
-            'modelVersionName': '2.0',
-            'modelTypeName': 'LORA',
-            'subscribeType': 1,
-            'defaultModel': False,
-            'nickname': '',
-            'cover': 'https://liblibai-online.liblib.cloud/img/70963d7681784de68e82797677086faf/d7def6904afb9ab645ae058dee3000517d04ffd73d7179c095df45b0a97ac3ee.png',
-            'suffix': 'safetensors',
-            'baseType': 19,
-            'needTriggerWord': False,
-            'triggerWord': '',
-            'hideGenerateInfo': False,
-            'sendStatus': 1,
-            'showType': 1,
-            'vipUsed': 0,
-            'userId': 859997,
-            'versionIntro': '{"noTriggerWord":1,"loraDes":"自拍照","weight":0.8,"vae":"none","cfg":3.5,"noHdSamplerMethods":1,"ckpt":["2925203","2867928"]}',
-            'executionScope': '{"defaultScope":"webui","scopes":{"comfy":true,"webui":true}}',
-            'auditStatus': 1,
-            'isXingliu': 0,
-            'addFlag': True,
-            'weight': 0.8,
-            'url': 'https://liblibai-online.liblib.cloud/img/70963d7681784de68e82797677086faf/d7def6904afb9ab645ae058dee3000517d04ffd73d7179c095df45b0a97ac3ee.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300',
-            'title': 'F.1真实素颜自拍照—小红书抖音涨粉Lora_2.0',
-            'name': 'F.1真实素颜自拍照—小红书抖音涨粉Lora',
-            'id': 18784900,
-            'edit': False,
-            'nickTitle': 'F.1真实素颜自拍照—小红书抖音涨粉Lora',
-            'focus': False,
-            'titles': 'F.1真实素颜自拍照—小红书抖音涨粉Lora',
-            'type': 0,
-            'selectedTriggerWords': [],
-        },
-        {
-            'modelId': 2896091,
-            'modelVersionId': 2896091,
-            'modelUuid': '26b557c54fad472fa0b7f9bb30257e29',
-            'modelVersionUuid': 'fdf30e2a449f476da6a678f5391d3ca4',
-            'modelTypeId': 5,
-            'modelName': '蜂腰大雷，抖音小红书图文专用',
-            'modelVersionName': 'v1.0',
-            'modelTypeName': 'LORA',
-            'subscribeType': 1,
-            'defaultModel': False,
-            'nickname': '',
-            'cover': 'https://liblibai-online.liblib.cloud/img/e316e54bb4204bf6aa0222d384967333/6e4e07995b23e4397b6a76f3aa0f94d2d79d19b7d385c2e59a4932ee75afe51c.png',
-            'suffix': 'safetensors',
-            'baseType': 19,
-            'needTriggerWord': False,
-            'triggerWord': 'fengyao',
-            'hideGenerateInfo': False,
-            'sendStatus': 1,
-            'showType': 1,
-            'vipUsed': 2,
-            'userId': 568731,
-            'versionIntro': '{"triggerWord":["fengyao"],"loraDes":"完美身材，蜂腰大雷","weight":0.8,"vae":"none","cfg":3.5,"noHdSamplerMethods":1,"ckpt":["2295774"]}',
-            'executionScope': '{"defaultScope":"webui","scopes":{"comfy":true,"webui":true}}',
-            'auditStatus': 1,
-            'isXingliu': 0,
-            'addFlag': True,
-            'weight': 0.8,
-            'url': 'https://liblibai-online.liblib.cloud/img/e316e54bb4204bf6aa0222d384967333/6e4e07995b23e4397b6a76f3aa0f94d2d79d19b7d385c2e59a4932ee75afe51c.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300',
-            'title': '蜂腰大雷，抖音小红书图文专用_v1.0',
-            'name': '蜂腰大雷，抖音小红书图文专用',
-            'id': 2896091,
-            'edit': False,
-            'nickTitle': '蜂腰大雷，抖音小红书图文专用',
-            'focus': False,
-            'titles': '蜂腰大雷，抖音小红书图文专用',
-            'type': 0,
-            'selectedTriggerWords': [
-                'fengyao',
-            ],
-        },
-        {
-            'modelId': 2903068,
-            'modelVersionId': 2903068,
-            'modelUuid': 'c6c29bef250b4716812b91e590787a56',
-            'modelVersionUuid': '916cfda25c9b4fdda72dd259c3f9168f',
-            'modelTypeId': 5,
-            'modelName': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
-            'modelVersionName': '1.0',
-            'modelTypeName': 'LORA',
-            'subscribeType': 1,
-            'defaultModel': False,
-            'nickname': '',
-            'cover': 'https://liblibai-online.liblib.cloud/img/df699aeb0f4a4d51adedae2f32b16ff4/6cca2b93a493ee905ba80da0ea17395f3e906712a0f8091ba60914c27e3af9e6.png',
-            'suffix': 'safetensors',
-            'baseType': 19,
-            'needTriggerWord': False,
-            'triggerWord': '',
-            'hideGenerateInfo': False,
-            'sendStatus': 1,
-            'showType': 1,
-            'vipUsed': 2,
-            'userId': 924362,
-            'versionIntro': '{"noTriggerWord":1,"loraDes":"F.1白净可爱美女写真7","weight":0.8,"vae":"none","cfg":3.4,"noHdSamplerMethods":1,"ckpt":["2295774"]}',
-            'executionScope': '{"defaultScope":"webui","scopes":{"comfy":true,"webui":true}}',
-            'auditStatus': 1,
-            'isXingliu': 0,
-            'addFlag': True,
-            'weight': 0.8,
-            'url': 'https://liblibai-online.liblib.cloud/img/df699aeb0f4a4d51adedae2f32b16ff4/6cca2b93a493ee905ba80da0ea17395f3e906712a0f8091ba60914c27e3af9e6.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300',
-            'title': 'F.1白净可爱美女写真72号_极致逼真人像摄影_1.0',
-            'name': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
-            'id': 2903068,
-            'edit': False,
-            'nickTitle': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
-            'focus': False,
-            'titles': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
-            'type': 0,
-            'selectedTriggerWords': [],
-        },
-    ],
-    'originalPrompt': '1girl, mouth mask, breasts, solo, mask, surgical mask, jewelry, long hair, necklace, looking at viewer, large breasts, upper body, black hair, white mask, collarbone',
-    'triggerWords': ',fengyao,',
-    'controlNet': [],
-    'taskQueuePriority': 1,
-}
 
-response = requests.post('https://www.liblib.art/gateway/sd-api/generate/image', cookies=cookies, headers=headers, json=json_data)
 
-print(response.json())
-# Note: json_data will not be serialized by requests
-# exactly as it was in the original request.
-#data = '{"checkpointId":2669985,"vae":"","promptMagic":0,"generateType":22,"frontCustomerReq":{"frontId":"0f6c4fd7-e12a-4c55-9203-894722615f08","windowId":"","tabType":"img2img","conAndSegAndGen":"gen"},"useLcm":false,"img2img":{"prompt":",fengyao,,1girl, mouth mask, breasts, solo, mask, surgical mask, jewelry, long hair, necklace, looking at viewer, large breasts, upper body, black hair, white mask, collarbone","negativePrompt":"ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),","imageMode":0,"sourceImageId":"img/721931e9fc6d4ec9aa0206f3c02ed640/75892905-70ab-4696-a784-e4773253272c.png","maskImageId":"","resizeMode":0,"samplingMethod":1,"samplingStep":30,"resizeWidth":1024,"resizeHeight":1024,"resizeScale":1,"imgCount":1,"cfgScale":3.5,"seed":-1,"denoisingStrength":0.75,"seedExtra":0,"restoreFaces":0,"tiling":0,"clipSkip":2,"randnSource":0,"sourceWidth":1024,"sourceHeight":1024},"additionalNetwork":[{"modelId":18784900,"modelVersionId":18784900,"modelUuid":"4167831416f24c599432171ef014d301","modelVersionUuid":"f348dba54cab4c1c817496623d6b6e03","modelTypeId":5,"modelName":"F.1真实素颜自拍照—小红书抖音涨粉Lora","modelVersionName":"2.0","modelTypeName":"LORA","subscribeType":1,"defaultModel":false,"nickname":"","cover":"https://liblibai-online.liblib.cloud/img/70963d7681784de68e82797677086faf/d7def6904afb9ab645ae058dee3000517d04ffd73d7179c095df45b0a97ac3ee.png","suffix":"safetensors","baseType":19,"needTriggerWord":false,"triggerWord":"","hideGenerateInfo":false,"sendStatus":1,"showType":1,"vipUsed":0,"userId":859997,"versionIntro":"{\\"noTriggerWord\\":1,\\"loraDes\\":\\"自拍照\\",\\"weight\\":0.8,\\"vae\\":\\"none\\",\\"cfg\\":3.5,\\"noHdSamplerMethods\\":1,\\"ckpt\\":[\\"2925203\\",\\"2867928\\"]}","executionScope":"{\\"defaultScope\\":\\"webui\\",\\"scopes\\":{\\"comfy\\":true,\\"webui\\":true}}","auditStatus":1,"isXingliu":0,"addFlag":true,"weight":0.8,"url":"https://liblibai-online.liblib.cloud/img/70963d7681784de68e82797677086faf/d7def6904afb9ab645ae058dee3000517d04ffd73d7179c095df45b0a97ac3ee.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300","title":"F.1真实素颜自拍照—小红书抖音涨粉Lora_2.0","name":"F.1真实素颜自拍照—小红书抖音涨粉Lora","id":18784900,"edit":false,"nickTitle":"F.1真实素颜自拍照—小红书抖音涨粉Lora","focus":false,"titles":"F.1真实素颜自拍照—小红书抖音涨粉Lora","type":0,"selectedTriggerWords":[]},{"modelId":2896091,"modelVersionId":2896091,"modelUuid":"26b557c54fad472fa0b7f9bb30257e29","modelVersionUuid":"fdf30e2a449f476da6a678f5391d3ca4","modelTypeId":5,"modelName":"蜂腰大雷，抖音小红书图文专用","modelVersionName":"v1.0","modelTypeName":"LORA","subscribeType":1,"defaultModel":false,"nickname":"","cover":"https://liblibai-online.liblib.cloud/img/e316e54bb4204bf6aa0222d384967333/6e4e07995b23e4397b6a76f3aa0f94d2d79d19b7d385c2e59a4932ee75afe51c.png","suffix":"safetensors","baseType":19,"needTriggerWord":false,"triggerWord":"fengyao","hideGenerateInfo":false,"sendStatus":1,"showType":1,"vipUsed":2,"userId":568731,"versionIntro":"{\\"triggerWord\\":[\\"fengyao\\"],\\"loraDes\\":\\"完美身材，蜂腰大雷\\",\\"weight\\":0.8,\\"vae\\":\\"none\\",\\"cfg\\":3.5,\\"noHdSamplerMethods\\":1,\\"ckpt\\":[\\"2295774\\"]}","executionScope":"{\\"defaultScope\\":\\"webui\\",\\"scopes\\":{\\"comfy\\":true,\\"webui\\":true}}","auditStatus":1,"isXingliu":0,"addFlag":true,"weight":0.8,"url":"https://liblibai-online.liblib.cloud/img/e316e54bb4204bf6aa0222d384967333/6e4e07995b23e4397b6a76f3aa0f94d2d79d19b7d385c2e59a4932ee75afe51c.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300","title":"蜂腰大雷，抖音小红书图文专用_v1.0","name":"蜂腰大雷，抖音小红书图文专用","id":2896091,"edit":false,"nickTitle":"蜂腰大雷，抖音小红书图文专用","focus":false,"titles":"蜂腰大雷，抖音小红书图文专用","type":0,"selectedTriggerWords":["fengyao"]},{"modelId":2903068,"modelVersionId":2903068,"modelUuid":"c6c29bef250b4716812b91e590787a56","modelVersionUuid":"916cfda25c9b4fdda72dd259c3f9168f","modelTypeId":5,"modelName":"F.1白净可爱美女写真72号_极致逼真人像摄影","modelVersionName":"1.0","modelTypeName":"LORA","subscribeType":1,"defaultModel":false,"nickname":"","cover":"https://liblibai-online.liblib.cloud/img/df699aeb0f4a4d51adedae2f32b16ff4/6cca2b93a493ee905ba80da0ea17395f3e906712a0f8091ba60914c27e3af9e6.png","suffix":"safetensors","baseType":19,"needTriggerWord":false,"triggerWord":"","hideGenerateInfo":false,"sendStatus":1,"showType":1,"vipUsed":2,"userId":924362,"versionIntro":"{\\"noTriggerWord\\":1,\\"loraDes\\":\\"F.1白净可爱美女写真7\\",\\"weight\\":0.8,\\"vae\\":\\"none\\",\\"cfg\\":3.4,\\"noHdSamplerMethods\\":1,\\"ckpt\\":[\\"2295774\\"]}","executionScope":"{\\"defaultScope\\":\\"webui\\",\\"scopes\\":{\\"comfy\\":true,\\"webui\\":true}}","auditStatus":1,"isXingliu":0,"addFlag":true,"weight":0.8,"url":"https://liblibai-online.liblib.cloud/img/df699aeb0f4a4d51adedae2f32b16ff4/6cca2b93a493ee905ba80da0ea17395f3e906712a0f8091ba60914c27e3af9e6.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300","title":"F.1白净可爱美女写真72号_极致逼真人像摄影_1.0","name":"F.1白净可爱美女写真72号_极致逼真人像摄影","id":2903068,"edit":false,"nickTitle":"F.1白净可爱美女写真72号_极致逼真人像摄影","focus":false,"titles":"F.1白净可爱美女写真72号_极致逼真人像摄影","type":0,"selectedTriggerWords":[]}],"originalPrompt":"1girl, mouth mask, breasts, solo, mask, surgical mask, jewelry, long hair, necklace, looking at viewer, large breasts, upper body, black hair, white mask, collarbone","triggerWords":",fengyao,","controlNet":[],"taskQueuePriority":1}'.encode()
-#response = requests.post('https://www.liblib.art/gateway/sd-api/generate/image', cookies=cookies, headers=headers, data=data)
+def generate_image():
+    json_data = {
+        'checkpointId': 2669985,
+        'promptMagic': 0,
+        'generateType': 21,
+        'frontCustomerReq': {
+            'frontId': '4d052cb6-4a71-4835-a356-8f3df78333ca',
+            'windowId': '',
+            'tabType': 'txt2img',
+            'conAndSegAndGen': 'gen',
+        },
+        'originalPrompt': 'A young woman of East Asian descent sits in a light beige/cream colored chair; she may be in her late teens or early twenties. She is wearing a simple light cream colored button up short sleeve shirt. Her hair is dark brown and tied back in a ponytail. She wears small,understated earrings. She has a light complexion and a thoughtful or pensive expression as she gazes into the camera. She has a slender frame and the background is an indoor space,possibly a classroom or restroom. The lighting is soft and natural and the color palette is subdued and neutral. The background colors are predominantly light beige,cream and navy,providing a soft backdrop for the subject. The composition is simple and straightforward,focusing on the subject and her pose with her arms crossed while standing in front of the camera. The overall style is relaxed,elegant and beautiful. There are some subtle little details in the image such as the button down shirt,earrings and background.,',
+        'triggerWords': 'fengyao',
+        'text2img': {
+            'prompt': 'fengyao,A young woman of East Asian descent sits in a light beige/cream colored chair; she may be in her late teens or early twenties. She is wearing a simple light cream colored button up short sleeve shirt. Her hair is dark brown and tied back in a ponytail. She wears small,understated earrings. She has a light complexion and a thoughtful or pensive expression as she gazes into the camera. She has a slender frame and the background is an indoor space,possibly a classroom or restroom. The lighting is soft and natural and the color palette is subdued and neutral. The background colors are predominantly light beige,cream and navy,providing a soft backdrop for the subject. The composition is simple and straightforward,focusing on the subject and her pose with her arms crossed while standing in front of the camera. The overall style is relaxed,elegant and beautiful. There are some subtle little details in the image such as the button down shirt,earrings and background.,',
+            'negativePrompt': 'ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),',
+            'extraNetwork': '',
+            'samplingMethod': 1,
+            'samplingStep': 30,
+            'width': 1024,
+            'height': 1024,
+            'imgCount': 1,
+            'cfgScale': 3.5,
+            'seed': -1,
+            'seedExtra': 0,
+            'clipSkip': 2,
+            'randnSource': 0,
+            'restoreFaces': 0,
+            'hiResFix': 0,
+            'tiling': 0,
+            'original_prompt': 'A young woman of East Asian descent sits in a light beige/cream colored chair; she may be in her late teens or early twenties. She is wearing a simple light cream colored button up short sleeve shirt. Her hair is dark brown and tied back in a ponytail. She wears small,understated earrings. She has a light complexion and a thoughtful or pensive expression as she gazes into the camera. She has a slender frame and the background is an indoor space,possibly a classroom or restroom. The lighting is soft and natural and the color palette is subdued and neutral. The background colors are predominantly light beige,cream and navy,providing a soft backdrop for the subject. The composition is simple and straightforward,focusing on the subject and her pose with her arms crossed while standing in front of the camera. The overall style is relaxed,elegant and beautiful. There are some subtle little details in the image such as the button down shirt,earrings and background.,',
+        },
+        'additionalNetwork': [
+            {
+                'modelId': 2896091,
+                'modelVersionId': 2896091,
+                'modelVersionUuid': 'fdf30e2a449f476da6a678f5391d3ca4',
+                'modelTypeId': 5,
+                'modelName': '蜂腰大雷，抖音小红书图文专用',
+                'modelVersionName': 'v1.0',
+                'modelTypeName': 'LORA',
+                'subscribeType': 1,
+                'defaultModel': False,
+                'nickname': '',
+                'cover': 'https://liblibai-online.liblib.cloud/img/e316e54bb4204bf6aa0222d384967333/6e4e07995b23e4397b6a76f3aa0f94d2d79d19b7d385c2e59a4932ee75afe51c.png',
+                'suffix': 'safetensors',
+                'baseType': 19,
+                'needTriggerWord': False,
+                'triggerWord': 'fengyao',
+                'hideGenerateInfo': False,
+                'sendStatus': 1,
+                'showType': 1,
+                'vipUsed': 2,
+                'userId': 568731,
+                'versionIntro': '{"triggerWord":["fengyao"],"loraDes":"完美身材，蜂腰大雷","weight":0.8,"vae":"none","cfg":3.5,"noHdSamplerMethods":1,"ckpt":["2295774"]}',
+                'executionScope': '{"defaultScope":"webui","scopes":{"comfy":true,"webui":true}}',
+                'auditStatus': 1,
+                'isXingliu': 0,
+                'url': 'https://liblibai-online.liblib.cloud/img/e316e54bb4204bf6aa0222d384967333/6e4e07995b23e4397b6a76f3aa0f94d2d79d19b7d385c2e59a4932ee75afe51c.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300',
+                'name': '蜂腰大雷，抖音小红书图文专用',
+                'id': 2896091,
+                'edit': False,
+                'addFlag': True,
+                'nickTitle': '蜂腰大雷，抖音小红书图文专用',
+                'focus': False,
+                'titles': '蜂腰大雷，抖音小红书图文专用',
+                'weight': 0.8,
+                'type': 0,
+                'selectedTriggerWords': [
+                    'fengyao',
+                ],
+                'trigger_word': 'fengyao',
+            },
+            {
+                'modelId': 2903068,
+                'modelVersionId': 2903068,
+                'modelVersionUuid': '916cfda25c9b4fdda72dd259c3f9168f',
+                'modelTypeId': 5,
+                'modelName': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
+                'modelVersionName': '1.0',
+                'modelTypeName': 'LORA',
+                'subscribeType': 1,
+                'defaultModel': False,
+                'nickname': '',
+                'cover': 'https://liblibai-online.liblib.cloud/img/df699aeb0f4a4d51adedae2f32b16ff4/6cca2b93a493ee905ba80da0ea17395f3e906712a0f8091ba60914c27e3af9e6.png',
+                'suffix': 'safetensors',
+                'baseType': 19,
+                'needTriggerWord': False,
+                'triggerWord': '',
+                'hideGenerateInfo': False,
+                'sendStatus': 1,
+                'showType': 1,
+                'vipUsed': 2,
+                'userId': 924362,
+                'versionIntro': '{"noTriggerWord":1,"loraDes":"F.1白净可爱美女写真7","weight":0.8,"vae":"none","cfg":3.4,"noHdSamplerMethods":1,"ckpt":["2295774"]}',
+                'executionScope': '{"defaultScope":"webui","scopes":{"comfy":true,"webui":true}}',
+                'auditStatus': 1,
+                'isXingliu': 0,
+                'addFlag': True,
+                'weight': 0.8,
+                'url': 'https://liblibai-online.liblib.cloud/img/df699aeb0f4a4d51adedae2f32b16ff4/6cca2b93a493ee905ba80da0ea17395f3e906712a0f8091ba60914c27e3af9e6.png?x-oss-process=image%2Fresize%2Cm_lfit%2Cw_300%2Ch_300',
+                'name': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
+                'id': 2903068,
+                'edit': False,
+                'nickTitle': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
+                'focus': False,
+                'titles': 'F.1白净可爱美女写真72号_极致逼真人像摄影',
+                'type': 0,
+                'selectedTriggerWords': [],
+                'trigger_word': '',
+            },
+        ],
+        'taskQueuePriority': 1,
+    }
+    while True:
+        response = requests.post('https://www.liblib.art/gateway/sd-api/generate/image', cookies=cookies, headers=headers, json=json_data)
+        data = response.json()
+        print(data)
+        if data["code"] != 0:
+            break
+
+
+        json_data2 = {
+            'flag': 0,
+        }
+        while True:
+            # 休眠2s
+            time.sleep(4)
+            response = requests.post(
+                f'https://www.liblib.art/gateway/sd-api/generate/progress/msg/v3/{data["data"]}',
+                cookies=cookies,
+                headers=headers,
+                json=json_data2,
+            )
+            data2 = response.json()
+            print(data2)
+            img_list = data2["data"]["images"]
+            if img_list:
+                for item in img_list:
+                    print(item["previewPath"])
+                    download_image_file(item["previewPath"], os.path.join(IMG_PATH, item["previewPath"].split("/")[-1]))
+                break

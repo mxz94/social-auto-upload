@@ -3,7 +3,7 @@ import asyncio
 from datetime import datetime
 from os.path import exists
 from pathlib import Path
-
+import random
 from conf import BASE_DIR
 from uploader.douyin_uploader.main import douyin_setup, DouYinVideo
 from uploader.ks_uploader.main import ks_setup, KSVideo
@@ -67,7 +67,33 @@ async def main():
         elif args.platform == SOCIAL_MEDIA_KUAISHOU:
             await ks_setup(str(account_file), handle=True)
     elif args.action == 'upload':
-        title, tags = get_title_and_hashtags(args.video_file)
+        try:
+            title, tags = get_title_and_hashtags(args.video_file)
+        except Exception as e:
+            descriptions = [
+                "沉思中的优雅少女",
+                "教室里的思绪",
+                "青春的瞬间",
+                "温柔的凝视",
+                "静谧时光",
+                "教室一隅",
+                "简单之美",
+                "青春的凝望",
+                "教室里的小秘密",
+                "优雅的瞬间",
+                "青春的回忆",
+                "沉思的少女",
+                "温柔的微笑",
+                "教室里的美好时光",
+                "青春的印记"
+            ]
+            title = descriptions[random.randint(0, len(descriptions) - 1)]
+            tags = []
+            # 随机放入两个
+            tags.append(descriptions[random.randint(0, len(descriptions) - 1)])
+            tags.append(descriptions[random.randint(0, len(descriptions) - 1)])
+            tags.append("青春")
+
         video_file = args.video_file
 
         if args.publish_type == 0:
